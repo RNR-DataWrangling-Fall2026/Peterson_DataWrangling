@@ -36,3 +36,9 @@ Removing fish with scale lengths \<1 mm
 fish_data_3 <- filter(fish_data, scalelength >= 1)
 write_csv(fish_data_3, "../data/fish_scales_greater_than_1.csv")
 ```
+
+
+```{r}
+ggplot(fish_data, aes(x = scalelength)) +
+  geom_histogram()
+```
