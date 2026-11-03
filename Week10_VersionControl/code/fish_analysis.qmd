@@ -18,6 +18,7 @@ Observe the dataset
 
 ```{r}
 head(fish_data)
+fish_data
 ```
 
 Summary statistics for fish scale length
@@ -27,4 +28,11 @@ fish_data |>
   summarize(min_scalelength = min(scalelength, na.rm = T),
             max_scalelength = max(scalelength, na.rm = T),
             mean_scalelength = mean(scalelength, na.rm = T))
+```
+
+Removing fish with scale lengths \<1 mm
+
+```{r}
+fish_data_3 <- filter(fish_data, scalelength >= 1)
+write_csv(fish_data_3, "../data/fish_scales_greater_than_1.csv")
 ```
