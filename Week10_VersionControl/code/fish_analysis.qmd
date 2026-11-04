@@ -37,8 +37,10 @@ fish_data_3 <- filter(fish_data, scalelength >= 1)
 write_csv(fish_data_3, "../data/fish_scales_greater_than_1.csv")
 ```
 
-
 ```{r}
 ggplot(fish_data, aes(x = scalelength)) +
-  geom_histogram()
+  geom_histogram(bins = 80) +
+  labs(x = "Scale length (mm)",
+       y = "Frequency")
+ggsave("../plots/scale_hist_by_length.jpg")
 ```
