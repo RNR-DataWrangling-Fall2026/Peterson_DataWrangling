@@ -173,13 +173,15 @@ Work on Questions 3 and 4 in the assignment.
 Again, as with other functions, we can combine functions of our own creation together.
 
 ```{r}
-
+shrub_volume <- calc_shrub_vol(0.8, 1.6, 2)
+est_shrub_mass(shrub_volume)
 ```
 
 We can also use pipes with our own functions. The output from the first function becomes the first argument for the second function.
 
 ```{r}
-
+calc_shrub_vol(0.8, 1.6, 2) |>
+  est_shrub_mass()
 ```
 
 ## Using the `tidyverse` within Functions
@@ -195,13 +197,22 @@ If we try to use `tidyverse` functions the way we normally would within our func
 First, let's load our packages and get some data from `palmerpenguins`.
 
 ```{r}
-
+library(tidyverse)
+library(palmerpenguins)
 ```
 
 Now, let's write some code for a ggplot within a function as we normally would.
 
 ```{r eval = FALSE}
+make_plot <- function(df, column, label){
+  ggplot(data = df, aes(x = column)) +
+    geom_histogram() +
+    labs(x = label,
+         y = "Frequency") +
+    theme_light()
+}
 
+make_plot(penguins, body_mass_g, "Body Mass (g)")
 ```
 
 Surprisingly, we get an error saying that the object `body_mass_g` is not found.
@@ -211,7 +222,15 @@ To fix this issue, we have to tell our code which inputs/arguments are this spec
 We can do this by "embracing" them in double braces (e.g., `{{ var }}`). This tells the function to treat them in the "tidy evaluation" method.
 
 ```{r}
+make_plot <- function(df, column, label){
+  ggplot(data = df, aes(x = {{ column }})) +
+    geom_histogram() +
+    labs(x = label,
+         y = "Frequency") +
+    theme_light()
+}
 
+make_plot(penguins, body_mass_g, "Body Mass (g)")
 ```
 
 ### Let's Practice!

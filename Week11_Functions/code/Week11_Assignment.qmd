@@ -165,8 +165,24 @@ This is a follow up to `Question 2: Use and Modify`.
 Allowing `a` and `b` to be passed as arguments to `get_mass_from_length()` made the function more flexible, but for some types of dinosaurs we don't have specific values of `a` and `b` and so we have to use general values that can be applied to a number of different species.
 
 a.  Rewrite your `get_mass_from length()` function from Question 2 so that its arguments have default values of `a = 39.9` and `b = 2.6` (the average values from [Seebacher 2001](http://www.jstor.org/stable/4524171)).
+
 b.  Use the rewritten function from (a) to estimate the mass of a Sauropoda (`a = 214.44`, `b = 1.46`) that is 22 m long.
+
 c.  Use this function to estimate the mass of a dinosaur from an unknown taxonomic group that is 16m long. Only pass the function `length`, not `a` and `b`, so that the default values are used.
+
+    ```{r}
+    #4a
+    get_mass_from_length_4 <- function(length, a = 39.9, b = 2.6){
+      mass <- a * length ^ b
+      return(mass)
+    }
+
+    #4b
+    get_mass_from_length_4(22, 214.44, 1.46)
+
+    #3c
+    get_mass_from_length_4(16)
+    ```
 
 ### 5. Combining Functions (20 points)
 
@@ -178,9 +194,24 @@ Write a function called `convert_kg_to_pounds` that converts kilograms into poun
 
 Using a pipe, connect this new function and your `get_mass_from_length()` function from Question 4 to estimate the weight, in pounds, of a 12 m long Stegosaurus with `a = 10.95` and `b = 2.64` (The estimated `a` and `b` values for *Stegosauria* from [Seebacher 2001](http://www.jstor.org/stable/4524171)).
 
+```{r}
+#5
+convert_kg_to_pounds <- function(kg){
+  pounds <- kg * 2.205
+  return(pounds)
+}
+get_mass_from_length_4(12, 10.95, 2.64) |>
+  convert_kg_to_pounds()
+```
+
 ### 6. Writing Tidyverse Functions (20 points)
 
 First, load either the `tidyverse` or `ggplot2`, if you haven't already done so in this document.
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
 
 Run the code below to create a data frame named `count_data` with columns named `state`, `count`, `area`, and `site`.
 
@@ -199,13 +230,38 @@ a.  Write a function takes two arguments: (1) a data frame with a `count` column
 
     Save your plot as a .png file using `ggsave()` in the appropriate sub-directory.
 
+    ```{r}
+    #6a
+    make_plot <- function(df, color){
+      ggplot(data = df, aes(x = area, y = count, color = {{ color }})) +
+        geom_point(size = 3)
+    }
+    make_plot(count_data, state)
+    ggsave("../figures/plot6a.png")
+    ```
+
 b.  Use the function from (a) to make a scatter plot of count as a function of area for the `count_data` data frame with the points colored by the `site` column.
 
     Save your plot as a .png file using `ggsave()` in the appropriate sub-directory.
 
+    ```{r}
+    make_plot(count_data, site)
+    ggsave("../figures/plot6b.png")
+    ```
+
 c.  Create a new function based on the function you created in (a); in this new function, allow the x and y axes to be any column in the data frame, specified as arguments in the function. This means you will also need to be able to specify the axis label names; in total, your function will need six different arguments!
 
     Remake the same plot as from (b) using your new function. Save your plot as a .png file using `ggsave()` in the appropriate sub-directory.
+
+    ```{r}
+    #6a
+    make_plot_c <- function(df, x, y, color){
+      ggplot(data = df, aes(x = {{ x }}, y = {{ y }}, color = {{ color }})) +
+        geom_point(size = 3)
+    }
+    make_plot_c(count_data, area, count, state)
+    ggsave("../figures/plot6c.png")
+    ```
 
 ### 7. Portal Species Time-Series Challenge (OPTIONAL)
 
