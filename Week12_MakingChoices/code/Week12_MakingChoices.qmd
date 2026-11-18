@@ -201,19 +201,35 @@ Note that the conditional statement to be tested goes inside a parenthetical. Th
 For example, let's say we have a value, `x`. If `x` is 5 or less, it can stay the way it is. However, if `x` is more than 5, we want to double it.
 
 ```{r}
+x <- 6
 
+if (x > 5) {
+  x <- x * 2
+}
+x
 ```
 
 What happens when the conditional statement is `FALSE`?
 
 ```{r}
+x <- 4 
 
+if (x > 5) {
+  x <- x * 2
+}
+x
 ```
 
 One important difference: because an `if` statement makes a single choice, it can only check one `TRUE` or `FALSE` value at a time. Let's see what happens if we give it a whole column.
 
 ```{r}
 #| error: true
+x <- c(4, 6, 9, NA)
+
+if (x > 5) {
+  x <- x * 2
+}
+x
 ```
 
 We get an error! If you want to make a choice for each value in a column, stick with `if_else` and `case_when`.
@@ -225,7 +241,13 @@ Let's look at another example, this time with some character values.
 Perhaps different vegetation types require different biomass calculations.
 
 ```{r}
+veg_type <- "shrub"
+volume <- 16.08
 
+if (veg_type == "shrub") {
+  biomass <- 2.65 * volume^0.9
+}
+biomass
 ```
 
 ### Testing Multiple Conditions with `if`-`else` Statements
@@ -235,7 +257,31 @@ Often, we want to choose one of several options rather than just one.
 To do this, we can add more conditions and associated actions with `else if`. We can also specify what should happen if none of the conditions are `TRUE` using `else` on its own.
 
 ```{r}
+veg_type <- "grass"
+volume <- 5
 
+if (veg_type == "shrub") {
+  biomass <- 2.65 * volume^0.9
+} else {
+  biomass <- NA
+}
+
+biomass
+```
+
+```{r}
+#if - else if - else
+veg_type <- "grass"
+volume <- 16.08
+
+if(veg_type == "shrub"){
+  biomass <- 2.65 * volume^0.9
+} else if (veg_type == "grass"){
+  biomass <- 0.65 * volume ^ 1.2
+} else {
+  biomass <- NA
+}
+biomass
 ```
 
 The code above checks the first condition. If `TRUE`, it will run that condition's code and skip the rest. If `FALSE`, it will check the next one and keep going until it runs out of conditions to check.
@@ -253,13 +299,24 @@ This seems like code we would want to reuse, so it would be a good idea to creat
 We can place our entire `if`-`else` statement inside a function, making sure that the function takes all required variables as arguments.
 
 ```{r}
-
+est_biomass <- function(veg_type, volume){
+  if (veg_type == "shrub"){
+    biomass <- 2.65 * volume ^ 0.9
+  } else if (veg_type == "grass"){
+    biomass <- 0.65 * volume ^ 1.2
+  } else {
+    biomass <- NA
+  }
+  return(biomass)
+}
 ```
 
 Now, we can run this function with different vegetation types and get different estimates for mass.
 
 ```{r}
-
+est_biomass("grass", 24)
+est_biomass("shrub", 24)
+est_biomass("tree", 24)
 ```
 
 > Work on Questions 3b-3c and Question 4
